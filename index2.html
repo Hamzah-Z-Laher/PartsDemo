@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>AutoParts • Inventory Portal</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f9ff;
+            color: #0b253a;
+            min-height: 100vh;
+        }
+
+        .app-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f5f9ff;
+        }
+
+        .portal-header-bar {
+            background: #0b2a41;
+            padding: 0.9rem 1.5rem;
+            box-shadow: 0 6px 14px rgba(0, 20, 40, 0.06);
+            border-bottom: 1px solid #1e405b;
+        }
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-area i {
+            font-size: 2rem;
+            color: #60a5fa;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .logo-area h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+        .logo-area span {
+            font-weight: 400;
+            color: #a5c9ff;
+        }
+        .demo-badge-header {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.3rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #32658c;
+            color: #d9eaff;
+        }
+
+        .inventory-main {
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        .inventory-hero {
+            margin-bottom: 2.2rem;
+        }
+        .inventory-hero h2 {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(145deg, #0b2a41, #1f4e72);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .inventory-hero p {
+            color: #2c5778;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .search-panel {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 1.8rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 26px rgba(0, 25, 45, 0.06), 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #eaf0f8;
+        }
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            gap: 12px;
+        }
+        .stats-badge {
+            background: #e9f2fc;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a4972;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #c7ddef;
+        }
+        .reset-btn {
+            background: transparent;
+            border: 1.5px solid #bfd7e9;
+            border-radius: 60px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            color: #1f4b6e;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #e1edfb;
+            border-color: #3b82f6;
+            color: #0b3b5e;
+        }
+
+        .search-flex {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .search-flex input {
+            flex: 4 1 240px;
+            padding: 1rem 1.5rem;
+            border: 2px solid #deeaf5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            font-weight: 500;
+            transition: 0.2s;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+        }
+        .search-flex input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+        .search-flex button {
+            flex: 0 0 auto;
+            background: #1e4f7a;
+            border: none;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 0 2rem;
+            min-width: 120px;
+            transition: 0.15s;
+            box-shadow: 0 6px 12px rgba(28, 78, 120, 0.2);
+            border: 1px solid #3070a0;
+        }
+        .search-flex button:hover {
+            background: #0f3c5e;
+            transform: scale(0.98);
+        }
+
+        /* ----- DESKTOP TABLE (unchanged) ----- */
+        .table-wrapper {
+            background: white;
+            border-radius: 24px;
+            overflow: auto;
+            box-shadow: 0 12px 28px rgba(0, 27, 45, 0.05);
+            border: 1px solid #e2edf5;
+            margin-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 620px;
+            display: table;
+        }
+        
+        /* Hide table on mobile, show cards instead */
+        @media (max-width: 640px) {
+            .inventory-table {
+                display: none;
+            }
+        }
+
+        .inventory-table th {
+            background: #0f2e44;
+            color: white;
+            padding: 1rem 1rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .inventory-table td {
+            padding: 1rem 1rem;
+            border-bottom: 1px solid #e9f0f7;
+            color: #1e3b55;
+            vertical-align: middle;
+        }
+        .inventory-table tr:last-child td {
+            border-bottom: none;
+        }
+        .inventory-table tr:hover td {
+            background-color: #f6fafd;
+        }
+
+        /* ----- MOBILE CARD VIEW (NEW) ----- */
+        .mobile-card-view {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        @media (max-width: 640px) {
+            .mobile-card-view {
+                display: flex;
+            }
+        }
+
+        .part-card {
+            background: white;
+            border-radius: 18px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0, 20, 40, 0.06);
+            border: 1px solid #e2edf5;
+            transition: 0.15s;
+        }
+        .part-card:active {
+            background: #fafcff;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .part-code-badge {
+            background: #e6edf8;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #0e3b62;
+            border: 1px solid #cbddec;
+        }
+        .stock-chip {
+            display: inline-block;
+            padding: 0.35rem 1rem;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .stock-high {
+            background: #dcfce7;
+            color: #11724b;
+        }
+        .stock-low {
+            background: #fff3cd;
+            color: #9e6300;
+        }
+        .stock-out {
+            background: #fee2e2;
+            color: #bc1c1c;
+        }
+
+        .card-description {
+            font-weight: 600;
+            color: #1e3b55;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed #d4e2ef;
+            padding-top: 12px;
+            margin-top: 4px;
+        }
+        .price-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #54738f;
+            letter-spacing: 0.3px;
+        }
+        .price-value {
+            font-weight: 800;
+            color: #0a334d;
+            font-size: 1.2rem;
+        }
+
+        .empty-card-message {
+            background: white;
+            border-radius: 18px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            color: #54738f;
+            border: 1px solid #e2edf5;
+        }
+
+        /* logout & footer */
+        .logout-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1.5px solid #d4e2ef;
+        }
+        .logout-btn {
+            background: transparent;
+            border: 1.5px solid #b7cde0;
+            padding: 0.7rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #1f4b6e;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        .logout-btn:hover {
+            background: #ffefef;
+            border-color: #e04e4e;
+            color: #b22222;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 1.8rem 1.5rem;
+            color: #54738f;
+            font-size: 0.8rem;
+            border-top: 1px solid #d7e3ef;
+            background: #f0f6fd;
+            margin-top: 0.5rem;
+        }
+
+        /* --- REFINED LOGIN MODAL --- */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 26, 40, 0.92);
+            backdrop-filter: blur(14px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.25s;
+        }
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+        .login-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 2.2rem 1.8rem;
+            width: 90%;
+            max-width: 380px;
+            text-align: left;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.25);
+        }
+        .login-card i {
+            font-size: 2.2rem;
+            color: #1e4f7a;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: center;
+        }
+        .login-card h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2a41;
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+        .login-sub {
+            text-align: center;
+            color: #4b6f8c;
+            font-size: 0.9rem;
+            margin-bottom: 1.8rem;
+        }
+        .login-field {
+            margin-bottom: 1.2rem;
+        }
+        .login-field label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #2c5778;
+            margin-bottom: 0.3rem;
+        }
+        .login-input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid #dae6f2;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            outline: none;
+            background: white;
+            transition: 0.2s;
+        }
+        .login-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .login-btn {
+            background: #1e4f7a;
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            margin-top: 0.8rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.15s;
+            border: 1px solid #3070a0;
+        }
+        .login-btn:hover {
+            background: #0f3c5e;
+        }
+        .demo-hint {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #5f7f9e;
+            border-top: 1px dashed #cbddec;
+            padding-top: 1.2rem;
+        }
+
+        /* mobile spacing */
+        @media (max-width: 640px) {
+            .inventory-main {
+                padding: 1.2rem 1rem 2rem;
+            }
+            .search-panel {
+                padding: 1.2rem;
+            }
+            .portal-header-bar {
+                padding: 0.7rem 1rem;
+            }
+            .logout-btn {
+                padding: 0.6rem 1.5rem;
+            }
+        }
+
+        button, .reset-btn, .logout-btn {
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN MODAL -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+        <i class="fas fa-warehouse"></i>
+        <h2>Parts Portal</h2>
+        <div class="login-sub">Inventory access</div>
+        
+        <div class="login-field">
+            <label><i class="far fa-user" style="margin-right: 4px;"></i> Username</label>
+            <input type="text" id="fakeUsername" class="login-input" placeholder="demo" autocomplete="off" value="parts_manager">
+        </div>
+        <div class="login-field">
+            <label><i class="fas fa-lock" style="margin-right: 4px;"></i> Password</label>
+            <input type="password" id="fakePassword" class="login-input" placeholder="••••••••" value="demo123">
+        </div>
+        
+        <button id="fakeLoginBtn" class="login-btn">Sign in</button>
+        <div class="demo-hint">
+            <i class="fas fa-info-circle"></i> any credentials work · demo
+        </div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent" style="display: none;">
+    <div class="app-wrapper">
+        <header class="portal-header-bar">
+            <div class="header-container">
+                <div class="logo-area">
+                    <i class="fas fa-car-battery"></i>
+                    <h1>Auto<span>Parts</span> <span style="font-weight:300; font-size:1.2rem;">· inventory</span></h1>
+                </div>
+                <div class="demo-badge-header">
+                    <i class="fas fa-database"></i> 12+ SKUs • live search
+                </div>
+            </div>
+        </header>
+
+        <div class="inventory-main">
+            <div class="inventory-hero">
+                <h2><i class="fas fa-magnifying-glass" style="color:#2563eb;"></i> Real‑time Parts Search</h2>
+                <p>Search by code, description, or vehicle — instant stock & pricing</p>
+            </div>
+
+            <!-- SEARCH PANEL -->
+            <div class="search-panel">
+                <div class="action-row">
+                    <div class="stats-badge" id="resultCountBadge"><i class="fas fa-boxes"></i> All items ready</div>
+                    <button class="reset-btn" id="resetSearchBtn"><i class="fas fa-eraser"></i> Clear filters</button>
+                </div>
+                <div class="search-flex">
+                    <input type="text" id="inventorySearchInput" placeholder="🔎  Search: BP-101, Hilux, oil filter..." autocomplete="off" inputmode="search">
+                    <button id="searchInventoryBtn"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+
+            <!-- DESKTOP TABLE -->
+            <div class="table-wrapper">
+                <table class="inventory-table" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Part Code</th>
+                            <th>Description / Fitment</th>
+                            <th>Stock Status</th>
+                            <th>Unit Price (ZAR)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <!-- JS populated -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- MOBILE CARD VIEW (NEW) -->
+            <div class="mobile-card-view" id="mobileCardView">
+                <!-- JS populated -->
+            </div>
+
+            <div class="logout-area">
+                <button id="logoutBtnPortal" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Exit portal</button>
+            </div>
+        </div>
+
+        <footer class="footer-note">
+            <i class="fas fa-check-circle"></i> Demo inventory — accurate stock levels & pricing · for demonstration only
+        </footer>
+    </div>
+</div>
+
+<script>
+    (function(){
+        "use strict";
+
+        const inventoryData = [
+            { code: "BP-101", desc: "Brake Pads - Toyota Hilux 2.8GD6 (Ceramic Premium)", qty: 45, price: "R 850.00" },
+            { code: "BP-102", desc: "Brake Pads - VW Polo Vivo 1.4", qty: 12, price: "R 450.00" },
+            { code: "OF-205", desc: "Oil Filter - Ford Ranger 3.2 TDCi", qty: 0, price: "R 180.00" },
+            { code: "SP-304", desc: "Spark Plugs (Set of 4) - NGK Iridium", qty: 120, price: "R 600.00" },
+            { code: "AB-401", desc: "Alternator Belt - Toyota Fortuner 2.8", qty: 5, price: "R 320.00" },
+            { code: "CF-505", desc: "Cabin Air Filter - BMW 3 Series (E90)", qty: 18, price: "R 410.00" },
+            { code: "WPF-88", desc: "Wiper Blades (Pair) - Hyundai i20", qty: 32, price: "R 290.00" },
+            { code: "RAD-777", desc: "Radiator - Nissan NP200 1.6", qty: 3, price: "R 1950.00" },
+            { code: "CL-09", desc: "Clutch Kit - Ford Fiesta 1.4 TDCI", qty: 7, price: "R 3200.00" },
+            { code: "ALT-911", desc: "Alternator - Toyota Corolla 1.8", qty: 2, price: "R 2750.00" },
+            { code: "STR-042", desc: "Starter Motor - Hyundai Tucson 2.0", qty: 4, price: "R 1890.00" },
+            { code: "SHP-88", desc: "Shock Absorbers (Front) - Ford Focus", qty: 9, price: "R 1250.00" }
+        ];
+
+        const escapeHtml = (str) => {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        };
+
+        function getStockInfo(qty) {
+            if (qty === 0) return { class: 'stock-out', text: '0 (Out of Stock)' };
+            if (qty < 10) return { class: 'stock-low', text: `${qty} (Low stock)` };
+            return { class: 'stock-high', text: `${qty} in stock` };
+        }
+
+        // Render both table and mobile cards
+        function renderInventory(data) {
+            renderTable(data);
+            renderMobileCards(data);
+            updateBadge(data.length);
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('inventoryTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty-message"><i class="fas fa-box-open"></i> No matching parts</td></tr>`;
+                return;
+            }
+            
+            data.forEach(item => {
+                const stock = getStockInfo(item.qty);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span style="background:#e6edf8; padding:0.25rem 1rem; border-radius:30px; font-family:monospace; font-weight:700; font-size:0.8rem; color:#0e3b62;">${escapeHtml(item.code)}</span></td>
+                    <td style="font-weight: 500;">${escapeHtml(item.desc)}</td>
+                    <td><span class="stock-chip ${stock.class}">${escapeHtml(stock.text)}</span></td>
+                    <td class="price-value" style="font-weight:800;">${escapeHtml(item.price)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderMobileCards(data) {
+            const container = document.getElementById('mobileCardView');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="empty-card-message"><i class="fas fa-box-open" style="font-size:2rem; opacity:0.5; margin-bottom:0.5rem; display:block;"></i>No matching parts<br><span style="font-size:0.8rem;">Try "Hilux" or "BP-101"</span></div>`;
+                return;
+            }
+            
+            data.forEach(item => {
+                const stock = getStockInfo(item.qty);
+                const card = document.createElement('div');
+                card.className = 'part-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="part-code-badge">${escapeHtml(item.code)}</span>
+                        <span class="stock-chip ${stock.class}">${escapeHtml(stock.text)}</span>
+                    </div>
+                    <div class="card-description">${escapeHtml(item.desc)}</div>
+                    <div class="card-footer">
+                        <span class="price-label">Unit Price</span>
+                        <span class="price-value">${escapeHtml(item.price)}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateBadge(count) {
+            const badge = document.getElementById('resultCountBadge');
+            if (badge) {
+                badge.innerHTML = count === 0 
+                    ? `<i class="fas fa-search"></i> 0 results found`
+                    : `<i class="fas fa-boxes"></i> ${count} item${count !== 1 ? 's' : ''} found`;
+            }
+        }
+
+        function performSearch() {
+            const input = document.getElementById('inventorySearchInput');
+            const query = input.value.trim().toLowerCase();
+            const data = query === "" ? inventoryData : inventoryData.filter(item => 
+                item.code.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query)
+            );
+            renderInventory(data);
+        }
+
+        function resetSearch() {
+            document.getElementById('inventorySearchInput').value = '';
+            renderInventory(inventoryData);
+        }
+
+        // ----- LOGIN -----
+        const loginOverlay = document.getElementById('loginOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const fakeLoginBtn = document.getElementById('fakeLoginBtn');
+        const userField = document.getElementById('fakeUsername');
+        const passField = document.getElementById('fakePassword');
+
+        function performFakeLogin() {
+            if (userField.value.trim() && passField.value.trim()) {
+                loginOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    loginOverlay.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    renderInventory(inventoryData);
+                    attachListeners();
+                    window.scrollTo({ top: 0 });
+                }, 200);
+            } else {
+                alert("Enter any username & password");
+            }
+        }
+
+        function handleLogout() {
+            mainContent.style.display = 'none';
+            loginOverlay.style.display = 'flex';
+            loginOverlay.classList.remove('hidden');
+            document.getElementById('inventorySearchInput').value = '';
+        }
+
+        function attachListeners() {
+            const searchBtn = document.getElementById('searchInventoryBtn');
+            const searchInput = document.getElementById('inventorySearchInput');
+            const resetBtn = document.getElementById('resetSearchBtn');
+            const logoutBtn = document.getElementById('logoutBtnPortal');
+
+            if (searchBtn) {
+                const newBtn = searchBtn.cloneNode(true);
+                searchBtn.parentNode.replaceChild(newBtn, searchBtn);
+                newBtn.addEventListener('click', performSearch);
+            }
+            if (searchInput) {
+                const handler = (e) => { if (e.key === 'Enter') performSearch(); };
+                searchInput.removeEventListener('keypress', handler);
+                searchInput.addEventListener('keypress', handler);
+            }
+            if (resetBtn) {
+                const newReset = resetBtn.cloneNode(true);
+                resetBtn.parentNode.replaceChild(newReset, resetBtn);
+                newReset.addEventListener('click', resetSearch);
+            }
+            if (logoutBtn) {
+                const newLogout = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogout, logoutBtn);
+                newLogout.addEventListener('click', handleLogout);
+            }
+        }
+
+        if (fakeLoginBtn) fakeLoginBtn.addEventListener('click', performFakeLogin);
+        if (passField) passField.addEventListener('keypress', (e) => { if (e.key === 'Enter') performFakeLogin(); });
+        if (userField) userField.addEventListener('keypress', (e) => { if (e.key === 'Enter') performFakeLogin(); });
+
+        if (loginOverlay.style.display !== 'none') loginOverlay.style.display = 'flex';
+    })();
+</script>
+</body>
+</html>
